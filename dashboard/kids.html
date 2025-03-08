@@ -1,51 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <title>Music Elty - Kids</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- BOXICONS ve Font Awesome -->
+  <link
+    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Google Fonts - Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Projendeki CSS -->
+  <link rel="stylesheet" href="../css/dashboard.css" />
+
+  <title>Music Elty - Kids</title>
+
+  <style>
+    /* Genel font ayarı */
+    body {
+      font-family: "Montserrat", sans-serif;
+    }
+
+    /* Müzik oynatıcı ana bölüm */
+    .music-player-section {
+      padding: 1rem;
+    }
+
+    /* Container tek renk (#f0f0f0) */
+    .music-container {
+      display: flex;
+      height: 500px;
+      background: #f0f0f0; /* Tüm alan aynı renk */
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    /* Şarkı listesi (sol taraf) */
+    .song-list {
+      width: 70%;
+      /* Arka planı artık container ile aynı (#f0f0f0) bırakabiliriz */
+      background-color: #f0f0f0;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    #songList {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #songList li {
+      background-color: #fff;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #songList li:hover {
+      background-color: #e2e2e2;
+    }
+
+    /* Oynatıcı bölümü (sağ taraf) */
+    .player {
+      width: 30%;
+      /* Arka planı sol tarafla aynı (#f0f0f0) */
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.5rem;
+      position: relative;
+      color: #111; /* Metin rengi koyu */
+    }
+
+    /* Albüm kapağı */
+    .album-art {
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      background-color: #ccc;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Şarkı başlığı ve sanatçı */
+    .song-title {
+      margin: 0.5rem 0 0.2rem 0;
+      font-size: 1.6rem;
+      font-weight: 600;
+      text-align: center;
+      color: #111;
+    }
+    .song-artist {
+      margin: 0;
+      font-size: 1rem;
+      color: #444;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    /* Şarkı sözleri */
+    .lyrics {
+      margin-top: 0.5rem;
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 100%;
+      height: 150px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+
+    /* Kontroller */
+    .controls {
+      margin-top: auto;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Butonların tam yuvarlak olması ve eşit görünmesi */
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      color: #111;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .control-btn:hover {
+      background-color: #ddd;
+      transform: scale(1.1);
+    }
+
+    /* İkonların tıklamadan etkilenmemesi için */
+    .control-btn i {
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="" class="brand"><i class="fa-solid fa-home icon"></i> Music Elty</a>
-		<ul class="side-menu">
-			<li><a href="./dashboard.html"><i class='bx bxs-dashboard icon' ></i> Dashboard</a></li>
-			<li class="divider" data-text="main">Main</li>
-			<li><a href="./adult.html"><i class="fa-solid fa-user-tie icon"></i> Yetişkin</a></li>
-			<li><a href="#" class="active"><i class="fa-solid fa-child icon"></i> Çocuk</a></li>
-            <li><a href="./quiz.html"><i class="fa-solid fa-trophy icon"></i> Quiz</a></li>
-		</ul>
-		<div class="ads">
-			<div class="wrapper">
-				<a href="#" class="btn-upgrade">Haber Al</a>
-				<p>Gelişmelerden <span>Haberdar olmak ister mısın?</span> O halde bize <span>Email adresini ilet</span></p>
-			</div>
-		</div>
-	</section>
-	<!-- SIDEBAR -->
+  <!-- SIDEBAR -->
+  <section id="sidebar">
+    <a href="#" class="brand"
+      ><i class="fa-solid fa-home icon"></i> Music Elty</a
+    >
+    <ul class="side-menu">
+      <li>
+        <a href="./dashboard.html"
+          ><i class="bx bxs-dashboard icon"></i> Dashboard</a
+        >
+      </li>
+      <li class="divider" data-text="main">Main</li>
+      <li>
+        <a href="./adult.html"
+          ><i class="fa-solid fa-user-tie icon"></i> Yetişkin</a
+        >
+      </li>
+      <li>
+        <a href="#" class="active"
+          ><i class="fa-solid fa-child icon"></i> Çocuk</a
+        >
+      </li>
+      <li>
+        <a href="./quiz.html"
+          ><i class="fa-solid fa-trophy icon"></i> Quiz</a
+        >
+      </li>
+    </ul>
+    <div class="ads">
+      <div class="wrapper">
+        <a href="#" class="btn-upgrade">Haber Al</a>
+        <p>
+          Gelişmelerden <span>Haberdar olmak ister misin?</span> O halde bize
+          <span>Email adresini ilet</span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- SIDEBAR -->
 
-	<!-- NAVBAR -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu toggle-sidebar'></i>
-		
-		</nav>
-		<!-- NAVBAR -->
+  <!-- NAVBAR & CONTENT -->
+  <section id="content">
+    <!-- NAVBAR -->
+    <nav>
+      <i class="bx bx-menu toggle-sidebar"></i>
+    </nav>
+    <!-- NAVBAR -->
 
-		<!-- MAIN -->
-		<main>
-			<h1 class="title">Kids</h1>
-			<ul class="breadcrumbs">
-				<li><a href="#">Home</a></li>
-				<li class="divider">/</li>
-				<li><a href="#" class="active">Kids</a></li>
-			</ul>
-        </main>
-        <script src="../js/dashboard.js"></script>
+    <!-- MAIN -->
+    <main>
+      <h1 class="title">Kids</h1>
+      <ul class="breadcrumbs">
+        <li><a href="#">Home</a></li>
+        <li class="divider">/</li>
+        <li><a href="#" class="active">Kids</a></li>
+      </ul>
+
+      <!-- Müzik Oynatıcı Bölümü -->
+      <section class="music-player-section">
+        <div class="music-container">
+          <!-- Sol taraftaki şarkı listesi -->
+          <div class="song-list">
+            <ul id="songList"></ul>
+          </div>
+
+          <!-- Sağ taraftaki oynatıcı -->
+          <div class="player">
+            <img
+              id="albumArt"
+              class="album-art"
+              src=""
+              alt="Albüm Kapağı"
+            />
+            <h2 id="songTitle" class="song-title">Şarkı Adı</h2>
+            <h4 id="songArtist" class="song-artist">Sanatçı</h4>
+
+            <div id="songLyrics" class="lyrics">
+              Şarkı sözleri burada görünecek.
+            </div>
+
+            <div class="controls">
+              <!-- Geri -->
+              <button onclick="prevSong()" class="control-btn">
+                <i class="fa-solid fa-backward"></i>
+              </button>
+
+              <!-- Oynat/Durdur (ikon değişimi JS'de) -->
+              <button onclick="playPause()" id="playPauseBtn" class="control-btn">
+                <i id="playPauseIcon" class="fa-solid fa-play"></i>
+              </button>
+
+              <!-- İleri -->
+              <button onclick="nextSong()" class="control-btn">
+                <i class="fa-solid fa-forward"></i>
+              </button>
+            </div>
+
+            <audio id="audioPlayer"></audio>
+          </div>
+        </div>
+      </section>
+      <!-- Müzik Oynatıcı Bölümü Sonu -->
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+
+    <!-- Müzik Oynatıcı JavaScript -->
+    <script>
+      // Şarkı bilgileri (örnek); dosya yollarını kendine göre ayarla
+      const songs = [
+        {
+          title: "Çocuk Şarkısı 1",
+          artist: "Sanatçı A",
+          lyrics: "Şarkı sözleri...\nSatır 2\nSatır 3",
+          audioSrc: "../music/kids1.mp3",
+          albumArt: "../images/kids1.jpg"
+        },
+        {
+          title: "Çocuk Şarkısı 2",
+          artist: "Sanatçı B",
+          lyrics: "Şarkı 2 sözleri...\nSatır 2\nSatır 3",
+          audioSrc: "../music/kids2.mp3",
+          albumArt: "../images/kids2.jpg"
+        },
+        {
+          title: "Çocuk Şarkısı 3",
+          artist: "Sanatçı C",
+          lyrics: "Şarkı 3 sözleri...\nSatır 2\nSatır 3",
+          audioSrc: "../music/kids3.mp3",
+          albumArt: "../images/kids3.jpg"
+        }
+      ];
+
+      let currentSongIndex = 0;
+      let audioPlayer;
+
+      window.addEventListener("DOMContentLoaded", () => {
+        audioPlayer = document.getElementById("audioPlayer");
+        generateSongList();
+        loadSong(currentSongIndex);
+      });
+
+      // Şarkı listesini oluşturma
+      function generateSongList() {
+        const songListElement = document.getElementById("songList");
+        if (!songListElement) return;
+        
+        songs.forEach((song, index) => {
+          const li = document.createElement("li");
+          li.textContent = song.title + " - " + song.artist;
+          li.addEventListener("click", () => {
+            loadSong(index);
+            playSong();
+          });
+          songListElement.appendChild(li);
+        });
+      }
+
+      // Belirtilen şarkıyı yükle
+      function loadSong(index) {
+        currentSongIndex = index;
+        const song = songs[currentSongIndex];
+        document.getElementById("songTitle").textContent = song.title;
+        document.getElementById("songArtist").textContent = song.artist;
+        document.getElementById("songLyrics").textContent = song.lyrics;
+        document.getElementById("albumArt").src = song.albumArt;
+        audioPlayer.src = song.audioSrc;
+
+        // Oynat/durdur ikonunu resetle
+        const playPauseIcon = document.getElementById("playPauseIcon");
+        playPauseIcon.classList.remove("fa-pause");
+        playPauseIcon.classList.add("fa-play");
+      }
+
+      function playSong() {
+        audioPlayer.play();
+      }
+
+      function pauseSong() {
+        audioPlayer.pause();
+      }
+
+      // Oynat/Durdur
+      function playPause() {
+        const playPauseIcon = document.getElementById("playPauseIcon");
+        if (audioPlayer.paused) {
+          audioPlayer.play();
+          playPauseIcon.classList.remove("fa-play");
+          playPauseIcon.classList.add("fa-pause");
+        } else {
+          audioPlayer.pause();
+          playPauseIcon.classList.remove("fa-pause");
+          playPauseIcon.classList.add("fa-play");
+        }
+      }
+
+      // İleri
+      function nextSong() {
+        currentSongIndex++;
+        if (currentSongIndex >= songs.length) {
+          currentSongIndex = 0;
+        }
+        loadSong(currentSongIndex);
+        playSong();
+        document.getElementById("playPauseIcon").classList.remove("fa-play");
+        document.getElementById("playPauseIcon").classList.add("fa-pause");
+      }
+
+      // Geri
+      function prevSong() {
+        currentSongIndex--;
+        if (currentSongIndex < 0) {
+          currentSongIndex = songs.length - 1;
+        }
+        loadSong(currentSongIndex);
+        playSong();
+        document.getElementById("playPauseIcon").classList.remove("fa-play");
+        document.getElementById("playPauseIcon").classList.add("fa-pause");
+      }
+    </script>
+    <!-- Müzik Oynatıcı JavaScript Sonu -->
+  </section>
 </body>
 </html>
