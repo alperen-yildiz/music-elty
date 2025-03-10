@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
 // Butonlara tıklanınca yönlendirme
 function redirectToDashboard(event) {
     if (getCookie("dashboard") === "true") {
-        window.location.href = "./dashboard/dashboard.html";
+        window.location.href = "./dashboard/index.html";
     } else {
         event.preventDefault(); // Cookie yoksa yönlendirme iptal
     }
